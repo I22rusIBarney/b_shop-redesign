@@ -17,10 +17,20 @@ export default function Ticket() {
 
   // Pick up replies while the chat is open.
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (document.visibilityState === 'visible') get<TicketView>(`/api/tickets/${id}`).then(t.setData).catch(() => {})
-    }, 10000)
-    return () => clearInterval(timer)
+    let active = true
+    const refresh = () => {
+      if (document.visibilityState !== 'visible') return
+      get<TicketView>(`/api/tickets/${id}`)
+        .then((data) => {
+          if (active) t.setData(data)
+        })
+        .catch(() => {})
+    }
+    const timer = setInterval(refresh, 10000)
+    return () => {
+      active = false
+      clearInterval(timer)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
