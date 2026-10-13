@@ -59,9 +59,10 @@ const manualPlatforms: [string, string][] = [
 
 function detect(): string {
   const ua = navigator.userAgent
-  if (/iPhone|iPad|iPod/i.test(ua)) return 'ios'
+  // iPadOS may report a desktop Macintosh user agent in Safari.
+  if (/iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1)) return 'ios'
   if (/Android/i.test(ua)) return /TV|AFT|BRAVIA/i.test(ua) ? 'androidTV' : 'android'
-  if (/Mac OS X/i.test(ua)) return 'macos'
+  if (/Mac OS X|Macintosh/i.test(ua)) return 'macos'
   if (/Windows/i.test(ua)) return 'windows'
   if (/Linux/i.test(ua)) return 'linux'
   return 'android'
@@ -112,7 +113,21 @@ export default function Install() {
   const url = sub?.subscription_url || ''
 
   useEffect(() => {
-    if (url) QRCode.toDataURL(url, { margin: 1, width: 400 }).then(setQr, () => setQr(''))
+    let active = true
+    setQr('')
+    if (url) {
+      QRCode.toDataURL(url, { margin: 1, width: 400 }).then(
+        (dataUrl) => {
+          if (active) setQr(dataUrl)
+        },
+        () => {
+          if (active) setQr('')
+        },
+      )
+    }
+    return () => {
+      active = false
+    }
   }, [url])
   useEffect(() => setAppIdx(0), [platform])
 

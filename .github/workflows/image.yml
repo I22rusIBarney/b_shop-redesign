@@ -14,6 +14,8 @@ permissions:
 
 jobs:
   build:
+    # Never publish images from experimental branches; release images come from main or version tags only.
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,7 +28,7 @@ jobs:
       - id: meta
         uses: docker/metadata-action@v5
         with:
-          images: images: ghcr.io/${{ github.repository_owner }}/b_shop-redesign
+          images: ghcr.io/${{ github.repository_owner }}/b_shop-redesign
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=ref,event=tag

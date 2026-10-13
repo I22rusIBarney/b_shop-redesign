@@ -33,7 +33,7 @@
   --r-ctl: 12px;
 
   --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--tg-safe-area-inset-bottom, 0px), var(--tg-content-safe-area-inset-bottom, 0px));
   color-scheme: dark;
   accent-color: var(--accent);
 }
@@ -539,3 +539,73 @@ html { touch-action: pan-x pan-y; } /* no pinch-zoom: the layout fits the screen
   .stats-bar select { flex: 0 0 auto; }
 }
 @media (max-width: 720px) { .kpis { grid-template-columns: 1fr 1fr; } }
+
+
+/* Mobile usability fixes: compact navigation, stable list chevrons, and ticket layout. */
+.item-link { min-width: 0; }
+.item-link .chev { flex: none; width: 18px; height: 18px; min-width: 18px; }
+.item-link .chev svg { width: 18px; height: 18px; }
+@media (max-width: 720px) {
+  .app { padding-bottom: calc(88px + var(--safe-bottom)); }
+  .tabbar { gap: 7px; padding: 4px 7px; }
+  .tabbar a { width: 44px; height: 44px; }
+  .tabbar svg { width: 21px; height: 21px; }
+  .ticket { padding: 18px 18px 16px; }
+  .ticket .left b { font-size: clamp(3rem, 14vw, 4rem); }
+  .ticket .perf { margin-left: -18px; margin-right: -18px; }
+  .ticket-layout { grid-template-columns: minmax(0, 1fr); }
+  .ticket-side { order: -1; }
+  .table-wrap { max-width: 100%; }
+  .admin .t { min-width: 720px; }
+}
+
+
+/* Responsive admin ticket list: compact cards on phones, full table on larger screens. */
+.ticket-list-results .ticket-cards { display: none; }
+.ticket-list-results .ticket-card {
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.ticket-list-results .ticket-card .row { min-width: 0; }
+.ticket-list-results .ticket-card b { overflow-wrap: anywhere; }
+@media (max-width: 720px) {
+  .ticket-list-results .ticket-cards { display: flex; gap: 10px; }
+  .ticket-list-results .table-wrap { display: none; }
+}
+
+
+/* Final small-screen pass: prevent the subscription header and action rows from squeezing the card. */
+@media (max-width: 420px) {
+  .app { padding-left: 12px; padding-right: 12px; padding-bottom: calc(84px + var(--safe-bottom)); }
+  .carousel-wrap { margin-left: 12px; margin-right: 12px; }
+  .car-arrow.right { right: -18px; }
+  .car-arrow.left { left: -18px; }
+  .sub-picker { max-width: 100%; gap: 8px; padding-left: 16px; padding-right: 16px; font-size: 1.05rem; }
+  .tabbar { max-width: calc(100vw - 24px); gap: 5px; padding: 4px 6px; }
+  .tabbar a { width: 42px; height: 42px; }
+  .tabbar svg { width: 20px; height: 20px; }
+  .sub-card { padding: 16px 13px 15px; }
+  .sub-head { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .sub-name { max-width: 100%; font-size: 1.1rem; white-space: normal; overflow-wrap: anywhere; }
+  .sub-date { font-size: .875rem; }
+  .link-row { gap: 9px; padding: 10px; border-radius: 16px; }
+  .link-ico { width: 32px; height: 32px; }
+  .link-label { font-size: .875rem; }
+  .link-url { font-size: .72rem; }
+  .sub-actions { gap: 9px; margin-top: 14px; }
+  .pill-btn { min-height: 46px; padding: 0 12px; font-size: .95rem; gap: 8px; }
+  .ticket { padding: 16px 14px 14px; border-radius: 22px; }
+  .ticket .left { gap: 7px; margin-top: 14px; }
+  .ticket .left b { font-size: clamp(2.7rem, 13vw, 3.5rem); }
+  .ticket .left span { font-size: 1rem; }
+  .ticket .perf { margin-left: -14px; margin-right: -14px; }
+  .ticket-list-results .ticket-card { padding: 14px; }
+  .ticket-list-results .ticket-card .row { align-items: flex-start; }
+  .ticket-list-results .ticket-card .ellipsis { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+}

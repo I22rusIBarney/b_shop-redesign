@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { get, post, type SupportConfig, type TicketView } from '../lib/api'
 import { haptic } from '../lib/tg'
@@ -14,13 +14,26 @@ export default function Ticket() {
   const { busy, run } = useAction()
   const [stars, setStars] = useState(0)
   const [comment, setComment] = useState('')
+  const refreshRequest = useRef(0)
 
   // Pick up replies while the chat is open.
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (document.visibilityState === 'visible') get<TicketView>(`/api/tickets/${id}`).then(t.setData).catch(() => {})
-    }, 10000)
-    return () => clearInterval(timer)
+    let active = true
+    const refresh = () => {
+      if (document.visibilityState !== 'visible') return
+      const request = ++refreshRequest.current
+      get<TicketView>(`/api/tickets/${id}`)
+        .then((data) => {
+          if (active && request === refreshRequest.current) t.setData(data)
+        })
+        .catch(() => {})
+    }
+    const timer = setInterval(refresh, 10000)
+    return () => {
+      active = false
+      refreshRequest.current += 1
+      clearInterval(timer)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
