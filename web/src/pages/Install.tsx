@@ -113,7 +113,21 @@ export default function Install() {
   const url = sub?.subscription_url || ''
 
   useEffect(() => {
-    if (url) QRCode.toDataURL(url, { margin: 1, width: 400 }).then(setQr, () => setQr(''))
+    let active = true
+    setQr('')
+    if (url) {
+      QRCode.toDataURL(url, { margin: 1, width: 400 }).then(
+        (dataUrl) => {
+          if (active) setQr(dataUrl)
+        },
+        () => {
+          if (active) setQr('')
+        },
+      )
+    }
+    return () => {
+      active = false
+    }
   }, [url])
   useEffect(() => setAppIdx(0), [platform])
 
