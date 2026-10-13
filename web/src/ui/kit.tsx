@@ -120,20 +120,28 @@ export function useLoad<T>(fn: () => Promise<T>, deps: unknown[] = []) {
   const [data, setData] = useState<T | undefined>()
   const [error, setError] = useState<string>('')
   const [loading, setLoading] = useState(true)
+  const requestId = useRef(0)
   const reload = useCallback(async () => {
+    const currentRequest = ++requestId.current
     setLoading(true)
     try {
-      setData(await fn())
+      const result = await fn()
+      if (currentRequest !== requestId.current) return
+      setData(result)
       setError('')
     } catch (e: any) {
+      if (currentRequest !== requestId.current) return
       setError(e?.message || 'Ошибка загрузки')
     } finally {
-      setLoading(false)
+      if (currentRequest === requestId.current) setLoading(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps)
   useEffect(() => {
     reload()
+    return () => {
+      requestId.current += 1
+    }
   }, [reload])
   return { data, setData, error, loading, reload }
 }
