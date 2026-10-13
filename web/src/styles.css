@@ -520,7 +520,7 @@ table.t { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 
 /* ---- admin on phones (inside Telegram too) ---- */
 html, body { overflow-x: hidden; }
-/* Keep browser pinch-to-zoom available for accessibility. */
+html { touch-action: pan-x pan-y; } /* no pinch-zoom: the layout fits the screen */
 .admin-main { overflow-x: clip; }
 .stats-grid { grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr)); }
 .stats-grid > *, .grid2 > *, .kpis > * { min-width: 0; }
