@@ -81,7 +81,7 @@ export default function Support() {
             {shown.map((t) => {
               const [label, cls] = customerTicketStatus[t.status]
               return (
-                <div key={t.id} className="item item-link" onClick={() => nav(`/support/${t.id}`)}>
+                <button key={t.id} type="button" className="item item-link" style={{ width: '100%', border: 0, background: 'transparent', textAlign: 'left' }} onClick={() => nav(`/support/${t.id}`)}>
                   <div className="grow" style={{ minWidth: 0 }}>
                     <div className="row" style={{ gap: 8 }}>
                       <b className="ellipsis">{t.subject}</b>
@@ -93,7 +93,7 @@ export default function Support() {
                   </div>
                   <span className={cls}>{label}</span>
                   <Chevron className="chev" />
-                </div>
+                </button>
               )
             })}
           </div>
