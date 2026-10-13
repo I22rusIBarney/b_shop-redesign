@@ -154,11 +154,21 @@ export function TicketChat() {
   const [editDraft, setEditDraft] = useState<Record<number, string>>({})
 
   useEffect(() => {
+    let active = true
     refreshBadges()
-    const timer = setInterval(() => {
-      if (document.visibilityState === 'visible') get<AdminTicketView>(`/api/admin/tickets/${id}`).then(t.setData).catch(() => {})
-    }, 10000)
-    return () => clearInterval(timer)
+    const refresh = () => {
+      if (document.visibilityState !== 'visible') return
+      get<AdminTicketView>(`/api/admin/tickets/${id}`)
+        .then((data) => {
+          if (active) t.setData(data)
+        })
+        .catch(() => {})
+    }
+    const timer = setInterval(refresh, 10000)
+    return () => {
+      active = false
+      clearInterval(timer)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
