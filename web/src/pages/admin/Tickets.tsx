@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { get, patch, post, type AdminTicketView, type SupportTemplate, type TicketMessage, type TicketRow } from '../../lib/api'
 import { refreshBadges } from '../../lib/badges'
@@ -152,21 +152,24 @@ export function TicketChat() {
   const [note, setNote] = useState(false)
   const [after, setAfter] = useState('waiting')
   const [editDraft, setEditDraft] = useState<Record<number, string>>({})
+  const refreshRequest = useRef(0)
 
   useEffect(() => {
     let active = true
     refreshBadges()
     const refresh = () => {
       if (document.visibilityState !== 'visible') return
+      const request = ++refreshRequest.current
       get<AdminTicketView>(`/api/admin/tickets/${id}`)
         .then((data) => {
-          if (active) t.setData(data)
+          if (active && request === refreshRequest.current) t.setData(data)
         })
         .catch(() => {})
     }
     const timer = setInterval(refresh, 10000)
     return () => {
       active = false
+      refreshRequest.current += 1
       clearInterval(timer)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
