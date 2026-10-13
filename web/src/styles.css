@@ -545,7 +545,6 @@ html { touch-action: pan-x pan-y; } /* no pinch-zoom: the layout fits the screen
 .item-link { min-width: 0; }
 .item-link .chev { flex: none; width: 18px; height: 18px; min-width: 18px; }
 .item-link .chev svg { width: 18px; height: 18px; }
-.ticket-side { order: -1; }
 @media (max-width: 720px) {
   .app { padding-bottom: calc(88px + var(--safe-bottom)); }
   .tabbar { gap: 7px; padding: 4px 7px; }
