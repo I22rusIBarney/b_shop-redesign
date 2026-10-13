@@ -33,7 +33,7 @@
   --r-ctl: 12px;
 
   --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--tg-safe-area-inset-bottom, 0px), var(--tg-content-safe-area-inset-bottom, 0px));
   color-scheme: dark;
   accent-color: var(--accent);
 }
