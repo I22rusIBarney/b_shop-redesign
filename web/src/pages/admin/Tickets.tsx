@@ -58,7 +58,29 @@ export function TicketList() {
         </div>
       ) : (
         <>
-          <div className="table-wrap">
+          <div className="ticket-list-results">
+            <div className="ticket-cards stack">
+              {data.data.items.map((t) => {
+                const [label, cls] = ticketStatus[t.status]
+                return (
+                  <button key={t.id} type="button" className="card ticket-card stack" onClick={() => nav(`/admin/tickets/${t.id}`)}>
+                    <div className="row wrap" style={{ justifyContent: 'space-between', gap: 8 }}>
+                      <b className="num">#{t.id} · {t.subject}</b>
+                      <span className={cls}>{label}</span>
+                    </div>
+                    <div className="small muted">{t.customer_name}{t.username ? ` · @${t.username}` : t.telegram_id ? ` · ${t.telegram_id}` : ''}</div>
+                    <div className="small ellipsis">{t.last_author && `${authorLabel[t.last_author] || t.last_author}: `}{t.last_body || 'Нет сообщений'}</div>
+                    <div className="row wrap small muted" style={{ gap: 8 }}>
+                      <span>{relative(t.updated_at)}</span>
+                      {t.rating ? <span>{'★'.repeat(t.rating)}</span> : null}
+                      {t.pending_draft && <span className="badge warn">черновик ИИ</span>}
+                      {t.ai_enabled && t.status !== 'closed' && <span className="badge">ИИ</span>}
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
+            <div className="table-wrap">
             <table className="t">
               <thead>
                 <tr>
@@ -101,6 +123,7 @@ export function TicketList() {
                 })}
               </tbody>
             </table>
+            </div>
           </div>
           <div className="pager">
             <span className="small muted num">
