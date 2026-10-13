@@ -1,0 +1,60 @@
+name: isolated-demo-pages
+
+on:
+  push:
+    branches:
+      - preview/isolated-demo
+    paths:
+      - "web/demo.html"
+      - "web/src/demo.tsx"
+      - "web/src/demo.css"
+      - "web/src/styles.css"
+      - "web/vite.config.ts"
+      - ".github/workflows/isolated-demo-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Deploys only the isolated demo site; the live app is never published here.
+concurrency:
+  group: isolated-demo-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npx tsc -b && npx vite build --base=/b_shop-redesign/
+      - name: Keep only the demo page and its assets
+        run: |
+          mkdir -p demo-site
+          cp dist/demo.html demo-site/index.html
+          cp -R dist/assets demo-site/assets
+          touch demo-site/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/demo-site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy demo only
+        id: deployment
+        uses: actions/deploy-pages@v4
