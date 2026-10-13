@@ -240,7 +240,7 @@ export function TicketChat() {
           </div>
         </div>
 
-        <div className="stack">
+        <div className="stack ticket-side">
           <section className="card stack">
             <h3>Клиент</h3>
             <Link to={`/admin/customers/${c.id}`}>
