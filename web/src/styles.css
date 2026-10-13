@@ -559,3 +559,23 @@ html { touch-action: pan-x pan-y; } /* no pinch-zoom: the layout fits the screen
   .table-wrap { max-width: 100%; }
   .admin .t { min-width: 720px; }
 }
+
+
+/* Responsive admin ticket list: compact cards on phones, full table on larger screens. */
+.ticket-list-results .ticket-cards { display: none; }
+.ticket-list-results .ticket-card {
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.ticket-list-results .ticket-card .row { min-width: 0; }
+.ticket-list-results .ticket-card b { overflow-wrap: anywhere; }
+@media (max-width: 720px) {
+  .ticket-list-results .ticket-cards { display: flex; gap: 10px; }
+  .ticket-list-results .table-wrap { display: none; }
+}
