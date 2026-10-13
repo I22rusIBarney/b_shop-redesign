@@ -579,3 +579,30 @@ html { touch-action: pan-x pan-y; } /* no pinch-zoom: the layout fits the screen
   .ticket-list-results .ticket-cards { display: flex; gap: 10px; }
   .ticket-list-results .table-wrap { display: none; }
 }
+
+
+/* Final small-screen pass: prevent the subscription header and action rows from squeezing the card. */
+@media (max-width: 420px) {
+  .app { padding-left: 12px; padding-right: 12px; padding-bottom: calc(84px + var(--safe-bottom)); }
+  .tabbar { max-width: calc(100vw - 24px); gap: 5px; padding: 4px 6px; }
+  .tabbar a { width: 42px; height: 42px; }
+  .tabbar svg { width: 20px; height: 20px; }
+  .sub-card { padding: 16px 13px 15px; }
+  .sub-head { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .sub-name { max-width: 100%; font-size: 1.1rem; white-space: normal; overflow-wrap: anywhere; }
+  .sub-date { font-size: .875rem; }
+  .link-row { gap: 9px; padding: 10px; border-radius: 16px; }
+  .link-ico { width: 32px; height: 32px; }
+  .link-label { font-size: .875rem; }
+  .link-url { font-size: .72rem; }
+  .sub-actions { gap: 9px; margin-top: 14px; }
+  .pill-btn { min-height: 46px; padding: 0 12px; font-size: .95rem; gap: 8px; }
+  .ticket { padding: 16px 14px 14px; border-radius: 22px; }
+  .ticket .left { gap: 7px; margin-top: 14px; }
+  .ticket .left b { font-size: clamp(2.7rem, 13vw, 3.5rem); }
+  .ticket .left span { font-size: 1rem; }
+  .ticket .perf { margin-left: -14px; margin-right: -14px; }
+  .ticket-list-results .ticket-card { padding: 14px; }
+  .ticket-list-results .ticket-card .row { align-items: flex-start; }
+  .ticket-list-results .ticket-card .ellipsis { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+}
