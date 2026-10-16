@@ -1,16 +1,23 @@
 # BobrGO visual assets
 
-Reusable, scalable SVG illustrations for the BobrGO cabinet redesign.
+Reusable, scalable SVG illustrations for the BobrGO cabinet redesign. SVG assets are vector-based and remain crisp on Retina and high-DPI displays.
 
-## Files
-- `beaver-mascot.svg` — mascot / brand illustration.
+## Brand and launch
+- `logo-splash.svg` — full launch/splash logo and wordmark.
+
+## Tariff icons
+- `plan-bobryonok.svg` — Бобрёнок.
+- `plan-premium.svg` — Бобр Премиум+.
+- `plan-maximum.svg` — Бобр Максимум.
+- `plan-empire.svg` — Бобр Империя.
+- `plan-master.svg` — Бобр Мастер.
+
+## Cabinet illustrations
+- `beaver-mascot.svg` — mascot illustration.
 - `subscription-hero.svg` — subscription-card hero background.
 - `secure-internet.svg` — secure connection illustration.
 - `multi-devices.svg` — use across multiple devices.
-- `server-locations.svg` — global server locations.
+- `server-locations.svg` — server locations.
 - `empty-subscriptions.svg` — empty subscription state.
-
-## Design
-Dark graphite/navy surfaces, warm amber accents, restrained glow and thin outlines to match the BobrGO cabinet concept. All illustrations are SVG vectors with a viewBox, so they remain crisp at any display size.
 
 Use from the web app as `/assets/bobrgo/<filename>.svg`.
